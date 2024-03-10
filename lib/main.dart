@@ -98,6 +98,26 @@ class DetailPage extends StatelessWidget {
               children: [
                 Text(provider.counter.toString()),
                 ...provider.names.map((e) => Text(e)),
+                DropdownButton(
+                  value: "A",
+                  items:[
+                    DropdownMenuItem(
+                      value: "A",
+                      child: Text("Elemento 1"),
+                    ),
+                    DropdownMenuItem(
+                      value:  "B",
+                      child: Text("Elemento 2"),
+                    ),
+                    DropdownMenuItem(
+                      value:  "C",
+                      child: Text("Elemento 3"),
+                    ),
+                  ],
+                  onChanged: (value){
+                     print(value);
+                  },
+                ),
               ],
             );
           },
