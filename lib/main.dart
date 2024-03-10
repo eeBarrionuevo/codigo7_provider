@@ -1,13 +1,10 @@
-
-
-
 import 'package:codigo7_provider/providers/counter_provider.dart';
 import 'package:codigo7_provider/providers/login_provider.dart';
 import 'package:codigo7_provider/providers/register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main(){
+void main() {
   runApp(MyApp());
 }
 
@@ -38,17 +35,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
-    CounterProvider counterProvider = Provider.of<CounterProvider>(context, listen: false);
+    CounterProvider counterProvider =
+        Provider.of<CounterProvider>(context, listen: false);
     print("BUILD!!!!");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
-        title: Text("Provider",),
+        title: Text(
+          "Provider",
+        ),
         actions: [
           // Text(counterProvider.counter.toString())
           Consumer<CounterProvider>(
-            builder: (context, provider, _){
+            builder: (context, provider, _) {
               print(provider.counter);
               return Text(provider.counter.toString());
             },
@@ -62,11 +61,46 @@ class _HomePageState extends State<HomePage> {
             Text(counterProvider.counter.toString()),
             ElevatedButton(
               child: Text("Contar"),
-              onPressed: (){
+              onPressed: () {
                 counterProvider.changeCounter();
               },
             ),
+            ElevatedButton(
+              child: Text("Agregar Nombre"),
+              onPressed: () {
+                //Aquí debemos de agregar un nombre a la lista del Provider.
+                counterProvider.addName("Juan");
+              },
+            ),
+            ElevatedButton(
+              child: Text("Ir"),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DetailPage()));
+              },
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class DetailPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Consumer<CounterProvider>(
+          builder: (context, provider, _) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(provider.counter.toString()),
+                ...provider.names.map((e) => Text(e)),
+              ],
+            );
+          },
         ),
       ),
     );

@@ -11,6 +11,12 @@ class CounterProvider extends ChangeNotifier {
     counter++;
     notifyListeners();
   }
+
+  void addName(String name){
+    names.add(name);
+    notifyListeners();
+  }
+
   void setValues(){
 
   }
