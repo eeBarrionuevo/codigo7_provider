@@ -1,5 +1,6 @@
 import 'package:codigo7_provider/providers/counter_provider.dart';
 import 'package:codigo7_provider/providers/login_provider.dart';
+import 'package:codigo7_provider/providers/product_provider.dart';
 import 'package:codigo7_provider/providers/register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CounterProvider()),
         ChangeNotifierProvider(create: (context) => LoginProvider()),
         ChangeNotifierProvider(create: (context) => RegisterProvider()),
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -59,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Consumer<CounterProvider>(
-              builder: (context, provider, _){
+              builder: (context, provider, _) {
                 return Text(provider.selectedName);
               },
             ),
@@ -119,7 +121,24 @@ class DetailPage extends StatelessWidget {
                       },
                     );
                   },
-                )
+                ),
+                
+                Consumer<ProductProvider>(
+                  builder: (context, provider, _) {
+                    return FutureBuilder(
+                      future: provider.getProducts(),
+                      builder: (BuildContext context, AsyncSnapshot snap){
+                        if(snap.hasData){
+                          List products = snap.data;
+                          return Column(
+                            children: products.map((e) => Text(e)).toList(),
+                          );
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    );
+                  },
+                ),
               ],
             );
           },
