@@ -7,8 +7,15 @@ class ProductProvider extends ChangeNotifier{
 
   APIServices apiServices = APIServices();
 
+  List products = [];
+
   Future<List> getProducts() async {
     return await apiServices.getProducts();
+  }
+
+  Future<void> getProducts2() async{
+    products = await apiServices.getProducts();
+    notifyListeners();
   }
 
 }

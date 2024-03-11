@@ -36,6 +36,17 @@ class _HomePageState extends State<HomePage> {
   int contador = 0;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ProductProvider productProvider =
+          Provider.of<ProductProvider>(context, listen: false);
+      productProvider.getProducts2();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     CounterProvider counterProvider =
         Provider.of<CounterProvider>(context, listen: false);
@@ -85,6 +96,11 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => DetailPage()));
               },
             ),
+            Consumer<ProductProvider>(
+              builder: (context, provider, _) {
+                return Text(provider.products.toString());
+              },
+            )
           ],
         ),
       ),
@@ -122,13 +138,12 @@ class DetailPage extends StatelessWidget {
                     );
                   },
                 ),
-                
                 Consumer<ProductProvider>(
                   builder: (context, provider, _) {
                     return FutureBuilder(
                       future: provider.getProducts(),
-                      builder: (BuildContext context, AsyncSnapshot snap){
-                        if(snap.hasData){
+                      builder: (BuildContext context, AsyncSnapshot snap) {
+                        if (snap.hasData) {
                           List products = snap.data;
                           return Column(
                             children: products.map((e) => Text(e)).toList(),
@@ -139,6 +154,11 @@ class DetailPage extends StatelessWidget {
                     );
                   },
                 ),
+                Consumer<ProductProvider>(
+                  builder: (context, provider, _) {
+                    return Text(provider.products.toString());
+                  },
+                )
               ],
             );
           },
