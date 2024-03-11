@@ -58,7 +58,11 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(counterProvider.counter.toString()),
+            Consumer<CounterProvider>(
+              builder: (context, provider, _){
+                return Text(provider.selectedName);
+              },
+            ),
             ElevatedButton(
               child: Text("Contar"),
               onPressed: () {
@@ -98,26 +102,24 @@ class DetailPage extends StatelessWidget {
               children: [
                 Text(provider.counter.toString()),
                 ...provider.names.map((e) => Text(e)),
-                DropdownButton(
-                  value: "A",
-                  items:[
-                    DropdownMenuItem(
-                      value: "A",
-                      child: Text("Elemento 1"),
-                    ),
-                    DropdownMenuItem(
-                      value:  "B",
-                      child: Text("Elemento 2"),
-                    ),
-                    DropdownMenuItem(
-                      value:  "C",
-                      child: Text("Elemento 3"),
-                    ),
-                  ],
-                  onChanged: (value){
-                     print(value);
+                Consumer<CounterProvider>(
+                  builder: (context, provider, _) {
+                    return DropdownButton(
+                      value: provider.selectedName,
+                      items: provider.names
+                          .map(
+                            (e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (String? value) {
+                        provider.changeName(value!);
+                      },
+                    );
                   },
-                ),
+                )
               ],
             );
           },
